@@ -14,23 +14,19 @@ RUN \
       dcraw && \
    apt-get clean autoclean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ENV VERSION_GALLERY3 3.0.9
+ENV VERSION_CONTRIB b97f3d3b564f54947c5b04b78b9d3bc54cc64d15
+ENV VERSION_PROGRESS e641a1f454ba17a6fe81def9ea054f75229da26b
 RUN \
-  git clone git://github.com/gallery/gallery3.git && \ 
-  cd /gallery3 && git checkout 3.0.9 && rm -rf .git 
+  rm -rf /var/www/* && \
+  curl -L https://github.com/gallery/gallery3/archive/${VERSION_GALLERY3}.tar.gz | \
+    tar xzf - -C /var/www --strip-components=1 && \
+  curl -L https://github.com/gallery/gallery3-contrib/archive/${VERSION_CONTRIB}.tar.gz | \
+    tar xzf - gallery3-contrib-${VERSION_CONTRIB}/3.0/modules -C /var/www --strip-components=2 && \
+  curl -L https://github.com/mstoltenburg/html5_upload_progress/archive/${VERSION_PROGRESS}.tar.gz | \
+    tar xzf - -C /var/www/modules --strip-components=1 && \
+  chown -R www-data:www-data /var/www/
 
-RUN \
-  git clone https://github.com/gallery/gallery3-contrib.git && \
-  mv /gallery3-contrib/3.0/modules/* /gallery3/modules/ && rm -rf /gallery3-contrib
-
-RUN git clone https://github.com/mstoltenburg/html5_upload_progress.git && mv html5_upload_progress /gallery3/modules/
-
-#RUN \
-#  git clone https://github.com/avolf/gallery-html5video.git && \
-#  mv /gallery-html5video/html5video /gallery3/modules/  && rm -rf /gallery-html5video
-
-RUN rm -rf /var/www/*
-RUN cp -r /gallery3/. /var/www/ 
-RUN rm -rf /gallery3 
 
 RUN a2enmod rewrite
 RUN a2enmod expires
@@ -39,7 +35,6 @@ ADD /apache-default /etc/apache2/sites-available/default
 ADD htaccess /var/www/.htaccess
 ADD php.ini /etc/php5/apache2/php.ini
 
-RUN chown -R www-data:www-data /var/www/*
 
 VOLUME ["/var/www/var"]
 
