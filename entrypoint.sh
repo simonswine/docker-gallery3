@@ -1,5 +1,5 @@
 #!/bin/bash
 
-chmod 0777 /var/www/var
-apache2ctl -D FOREGROUND
- 
+chown -cR www-data:www-data /var/www/var
+chmod 750 /var/www/var
+exec apache2ctl -D FOREGROUND
