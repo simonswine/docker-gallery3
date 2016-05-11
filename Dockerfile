@@ -1,4 +1,4 @@
-FROM debian:wheezy
+FROM debian:jessie
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -7,18 +7,12 @@ RUN \
   apt-get install -y \
       apache2 \
       libapache2-mod-php5 \
+      curl \
       php5-mysql \
       imagemagick \
       graphicsmagick \
-      dcraw \
-      ffmpeg \
-      git \
-      libjs-jquery \
-      libjs-jquery-ui \
-      mysql-client \
-      wwwconfig-common \
-      dbconfig-common && \
-   apt-get clean autoclean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* 
+      dcraw && \
+   apt-get clean autoclean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN \
   git clone git://github.com/gallery/gallery3.git && \ 
