@@ -30,7 +30,7 @@ RUN \
 
 RUN a2enmod rewrite
 RUN a2enmod expires
-ADD /apache-default /etc/apache2/sites-available/default
+ADD /apache-default /etc/apache2/sites-available/000-default.conf
 
 ADD htaccess /var/www/.htaccess
 ADD php.ini /etc/php5/apache2/php.ini
